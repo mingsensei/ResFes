@@ -39,7 +39,8 @@ public class RegisterServlet extends HttpServlet {
         String referer = request.getHeader("referer");
 
         if (success) {
-            response.sendRedirect(referer != null ? referer : "login.jsp");
+            response.sendRedirect( request.getContextPath() + "/login");
+
         } else {
             request.setAttribute("error", "Đăng ký thất bại!");
             request.getRequestDispatcher("register.jsp").forward(request, response);

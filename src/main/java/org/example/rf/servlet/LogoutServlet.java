@@ -8,14 +8,16 @@ import java.io.IOException;
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Lấy session hiện tại
         HttpSession session = request.getSession(false);
+
         if (session != null) {
-            session.invalidate();
+            session.invalidate(); // Hủy session
         }
 
-        String referer = request.getHeader("referer");
-        response.sendRedirect(referer != null ? referer : "index.jsp");
+        // Chuyển hướng về trang đăng nhập
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 }
