@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static final String URL = "jdbc:sqlserver://localhost:1444;databaseName=RF;encrypt=false";
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=RF;encrypt=true;trustServerCertificate=true";
     private static final String USER = "sa"; // Thay bằng username của SQL Server
-    private static final String PASSWORD = "12345Minh@"; // Thay bằng mật khẩu của SQL Server
+    private static final String PASSWORD = "123"; // Thay bằng mật khẩu của SQL Server
 
     public static Connection getConnection() {
         try {

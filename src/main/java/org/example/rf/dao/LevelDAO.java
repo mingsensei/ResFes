@@ -12,8 +12,8 @@ public class LevelDAO {
     // ====== SQL ======
     private static final String SELECT_ALL = "SELECT * FROM levels";
     private static final String SELECT_BY_ID = "SELECT * FROM levels WHERE id = ?";
-    private static final String SELECT_BY_STUDENT_AND_SUBJECT = "SELECT * FROM levels WHERE student_id = ? AND subject_id = ?";
-    private static final String INSERT = "INSERT INTO levels (id, student_id, subject_id, level, current_exp, required_exp) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_BY_STUDENT_AND_CHAPTER = "SELECT * FROM levels WHERE student_id = ? AND chapter_id = ?";
+    private static final String INSERT = "INSERT INTO levels (id, student_id, chapter_id, level, current_exp, required_exp) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE levels SET level = ?, current_exp = ?, required_exp = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM levels WHERE id = ?";
 
@@ -50,13 +50,13 @@ public class LevelDAO {
         return null;
     }
 
-    // ====== LẤY THEO STUDENT & SUBJECT ======
-    public Level getLevelByStudentAndSubject(String studentId, String subjectId) {
+    // ====== LẤY THEO STUDENT & CHAPTER ======
+    public Level getLevelByStudentAndChapter(String studentId, String chapterId) {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_STUDENT_AND_SUBJECT)) {
+             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_STUDENT_AND_CHAPTER)) {
 
             stmt.setString(1, studentId);
-            stmt.setString(2, subjectId);
+            stmt.setString(2, chapterId);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -75,7 +75,7 @@ public class LevelDAO {
 
             stmt.setString(1, level.getId());
             stmt.setString(2, level.getStudentId());
-            stmt.setString(3, level.getSubjectId());
+            stmt.setString(3, level.getChapterId());
             stmt.setInt(4, level.getLevel());
             stmt.setInt(5, level.getCurrentExp());
             stmt.setInt(6, level.getRequiredExp());
@@ -122,7 +122,7 @@ public class LevelDAO {
         return new Level(
                 rs.getString("id"),
                 rs.getString("student_id"),
-                rs.getString("subject_id"),
+                rs.getString("chapter_id"),
                 rs.getInt("level"),
                 rs.getInt("current_exp"),
                 rs.getInt("required_exp")

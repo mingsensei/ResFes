@@ -13,8 +13,8 @@ public class MaterialDAO {
     private static final String SELECT_ALL = "SELECT * FROM materials";
     private static final String SELECT_BY_ID = "SELECT * FROM materials WHERE id = ?";
     private static final String SELECT_BY_CHAPTER_ID = "SELECT * FROM materials WHERE chapter_id = ?";
-    private static final String INSERT = "INSERT INTO materials (id, title, content, chapter_id, type) VALUES (?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE materials SET title = ?, content = ?, chapter_id = ?, type = ? WHERE id = ?";
+    private static final String INSERT = "INSERT INTO materials (id, title, pdfPath, chapter_id, type, vectorDbPath) VALUES (?, ?, ?, ?, ?, ?)"; // Thêm vectorDbPath
+    private static final String UPDATE = "UPDATE materials SET title = ?, pdfPath = ?, chapter_id = ?, type = ?, vectorDbPath = ? WHERE id = ?"; // Thêm vectorDbPath
     private static final String DELETE = "DELETE FROM materials WHERE id = ?";
 
     // ====== LẤY TOÀN BỘ MATERIAL ======
@@ -73,11 +73,12 @@ public class MaterialDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT)) {
 
-            stmt.setString(1, material.getId());
+            stmt.setString(1, material.getMaterialId());
             stmt.setString(2, material.getTitle());
-            stmt.setString(3, material.getContent());
+            stmt.setString(3, material.getPdfPath());
             stmt.setString(4, material.getChapterId());
             stmt.setString(5, material.getType());
+            stmt.setString(6, material.getVectorDbPath()); // Thêm vectorDbPath
 
             return stmt.executeUpdate() > 0;
 
@@ -93,10 +94,12 @@ public class MaterialDAO {
              PreparedStatement stmt = conn.prepareStatement(UPDATE)) {
 
             stmt.setString(1, material.getTitle());
-            stmt.setString(2, material.getContent());
+            stmt.setString(2, material.getPdfPath());
             stmt.setString(3, material.getChapterId());
             stmt.setString(4, material.getType());
-            stmt.setString(5, material.getId());
+            stmt.setString(5, material.getVectorDbPath()); // Thêm vectorDbPath
+            stmt.setString(6, material.getMaterialId());
+
 
             return stmt.executeUpdate() > 0;
 
@@ -125,9 +128,10 @@ public class MaterialDAO {
         return new Material(
                 rs.getString("id"),
                 rs.getString("title"),
-                rs.getString("content"),
+                rs.getString("pdfPath"),  // Sửa lại thành pdfPath
                 rs.getString("chapter_id"),
-                rs.getString("type")
+                rs.getString("type"),
+                rs.getString("vectorDbPath") // Thêm vectorDbPath
         );
     }
 }
