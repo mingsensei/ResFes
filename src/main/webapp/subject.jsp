@@ -1,6 +1,6 @@
 <%@ page import="org.example.rf.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -48,7 +48,7 @@
             <div class="subject-card">
                 <div class="subject-title">${subject.name}</div>
                 <div class="subject-desc">${subject.description}</div>
-                <a href="chapter.jsp?subjectId=${subject.id}" class="btn-learn">Vào học</a>
+                <a href="chapter?subjectId=${subject.id}" class="btn-learn">Vào học</a>
             </div>
         </c:forEach>
     </div>

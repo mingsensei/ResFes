@@ -140,4 +140,38 @@ public class ExamDAO {
                 new ArrayList<>(questionDAO.getQuestionsByExamId(id))
         );
     }
+
+    //ExamDAO.java
+    public boolean incrementScore(String examId) {
+        String sql = "UPDATE exams SET score = score + 1 WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, examId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void calculateExamResult(String examId) {
+        int correctAnswers = 0;
+        List<Question> questions = questionDAO.getQuestionsByExamId(examId);
+
+        for (Question question : questions) {
+            if (question.getStudentAnswer() != null && question.getStudentAnswer().equals(question.getCorrectOption())) {
+                correctAnswers++;
+            }
+        }
+
+        String sql = "UPDATE exams SET score = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, correctAnswers);
+            pstmt.setString(2, examId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

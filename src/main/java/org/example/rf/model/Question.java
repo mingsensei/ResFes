@@ -10,12 +10,14 @@ public class Question {
     private String correctOption;
     private String studentAnswer;
     private String examId;
-    private String explain; // ✅ Thêm thuộc tính giải thích
+    private String explain;    // ✅ Thuộc tính giải thích
+    private int difficulty;    // ✅ Thuộc tính độ khó (0-5 hoặc theo thang điểm bạn định nghĩa)
 
     public Question() {}
 
     public Question(String id, String content, String optionA, String optionB, String optionC,
-                    String optionD, String correctOption, String studentAnswer, String examId, String explain) {
+                    String optionD, String correctOption, String studentAnswer,
+                    String examId, String explain, int difficulty) {
         this.id = id;
         this.content = content;
         this.optionA = optionA;
@@ -25,7 +27,8 @@ public class Question {
         this.correctOption = correctOption;
         this.studentAnswer = studentAnswer;
         this.examId = examId;
-        this.explain = explain; // ✅ Khởi tạo thuộc tính mới
+        this.explain = explain;
+        this.difficulty = difficulty;  // ✅ Gán độ khó
     }
 
     public String getId() { return id; }
@@ -55,6 +58,9 @@ public class Question {
     public String getExamId() { return examId; }
     public void setExamId(String examId) { this.examId = examId; }
 
-    public String getExplain() { return explain; } // ✅ Getter
-    public void setExplain(String explain) { this.explain = explain; } // ✅ Setter
+    public String getExplain() { return explain; }
+    public void setExplain(String explain) { this.explain = explain; }
+
+    public int getDifficulty() { return difficulty; }             // ✅ Getter độ khó
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; } // ✅ Setter độ khó
 }

@@ -1,6 +1,7 @@
 <%@ page import="org.example.rf.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -8,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chương học</title>
   <link rel="stylesheet" href="<%= request.getContextPath() %>/css/header.css" />
-  <link rel="stylesheet" href="chapter.css" />
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/chapter.css" />
 </head>
 <body>
 
@@ -43,21 +44,30 @@
 <!-- Body: danh sách chương học -->
 <main>
   <h1 class="subject-heading">Danh sách Chương học</h1>
-  <div class="chapter-list">
+  <div class="chapter-container">
     <c:forEach var="chapter" items="${chapterList}">
-      <div class="chapter-box">
-        <div class="chapter-info">
-          <h3>${chapter.title}</h3>
-          <p>Thứ tự: ${chapter.orderIndex}</p>
+      <div class="chapter-card">
+        <div class="chapter-title">${chapter.title}</div>
+        <div class="chapter-actions">
+          <a href="material.jsp?chapterId=${chapter.id}" class="btn-learn">Xem tài liệu</a>
+          <a href="#" onclick="showQuestionDialog('${chapter.id}')" class="btn-test">Bắt đầu kiểm tra</a>
         </div>
-        <a href="material.jsp?chapterId=${chapter.id}" class="btn-learn">Xem tài liệu</a>
       </div>
     </c:forEach>
   </div>
 </main>
 
+<script>
+  function showQuestionDialog(chapterId) {
+    let numQuestions = prompt("Vui lòng nhập số lượng câu hỏi bạn muốn:");
+    if (numQuestions != null && numQuestions.trim() !== "") {
+      window.location.href = '<%=request.getContextPath()%>/exam?chapterId=' + chapterId + '&numQuestions=' + numQuestions;
+    }
+  }
+</script>
+
 <footer>
-  <p>&copy; 2025 EduPlatform. All rights reserved.</p>
+  <p>© 2025 EduPlatform. All rights reserved.</p>
 </footer>
 
 </body>
