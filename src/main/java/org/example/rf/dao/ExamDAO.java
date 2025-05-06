@@ -15,11 +15,11 @@ public class ExamDAO {
     private static final String SELECT_ALL = "SELECT * FROM exams";
     private static final String SELECT_BY_ID = "SELECT * FROM exams WHERE id = ?";
     private static final String SELECT_BY_STUDENT_ID = "SELECT * FROM exams WHERE student_id = ?";
-    private static final String INSERT = "INSERT INTO exams (id, student_id, subject_id, score, submitted_at) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO exams (id, student_id, chapter_id, score, submitted_at) VALUES (?, ?, ?, ?, ?)";
     private static final String DELETE = "DELETE FROM exams WHERE id = ?";
     private static final String UPDATE_SCORE = "UPDATE exams SET score = ?, submitted_at = ? WHERE id = ?";
 
-    private QuestionDAO questionDAO = new QuestionDAO(); // Để xử lý phần câu hỏi
+    private QuestionDAO questionDAO = new QuestionDAO();
 
     // ====== LẤY TOÀN BỘ EXAM ======
     public List<Exam> getAllExams() {
@@ -54,7 +54,7 @@ public class ExamDAO {
         return null;
     }
 
-    // ====== LẤY EXAM THEO STUDENT ======
+    // ====== LẤY THEO STUDENT ======
     public List<Exam> getExamsByStudentId(String studentId) {
         List<Exam> list = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
@@ -79,7 +79,7 @@ public class ExamDAO {
 
             stmt.setString(1, exam.getId());
             stmt.setString(2, exam.getStudentId());
-            stmt.setString(3, exam.getSubjectId());
+            stmt.setString(3, exam.getChapterId()); // ✅ chapter_id
             stmt.setInt(4, exam.getScore());
             stmt.setTimestamp(5, Timestamp.valueOf(exam.getSubmittedAt()));
 
@@ -99,7 +99,7 @@ public class ExamDAO {
         return false;
     }
 
-    // ====== CẬP NHẬT ĐIỂM VÀ NGÀY NỘP ======
+    // ====== CẬP NHẬT ĐIỂM ======
     public boolean updateExamScoreAndTime(String examId, int score, LocalDateTime submittedAt) {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_SCORE)) {
@@ -134,7 +134,7 @@ public class ExamDAO {
         return new Exam(
                 id,
                 rs.getString("student_id"),
-                rs.getString("subject_id"),
+                rs.getString("chapter_id"), // ✅ đổi từ subject_id sang chapter_id
                 rs.getInt("score"),
                 rs.getTimestamp("submitted_at").toLocalDateTime(),
                 new ArrayList<>(questionDAO.getQuestionsByExamId(id))

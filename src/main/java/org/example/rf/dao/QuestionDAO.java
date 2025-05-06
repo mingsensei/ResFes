@@ -13,11 +13,14 @@ public class QuestionDAO {
     private static final String SELECT_ALL = "SELECT * FROM questions";
     private static final String SELECT_BY_ID = "SELECT * FROM questions WHERE id = ?";
     private static final String SELECT_BY_EXAM_ID = "SELECT * FROM questions WHERE exam_id = ?";
-    private static final String INSERT = "INSERT INTO questions (id, content, option_a, option_b, option_c, option_d, correct_option, student_answer, exam_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String DELETE = "DELETE FROM questions WHERE id = ?";
-    private static final String UPDATE = "UPDATE questions SET content = ?, option_a = ?, option_b = ?, option_c = ?, option_d = ?, correct_option = ?, student_answer = ?, exam_id = ? WHERE id = ?";
 
-    // ====== LẤY TOÀN BỘ QUESTION ======
+    private static final String INSERT = "INSERT INTO questions (id, content, option_a, option_b, option_c, option_d, correct_option, student_answer, exam_id, explain) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private static final String DELETE = "DELETE FROM questions WHERE id = ?";
+
+    private static final String UPDATE = "UPDATE questions SET content = ?, option_a = ?, option_b = ?, option_c = ?, option_d = ?, correct_option = ?, student_answer = ?, exam_id = ?, explain = ? WHERE id = ?";
+
+    // ====== LẤY TOÀN BỘ ======
     public List<Question> getAllQuestions() {
         List<Question> list = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
@@ -82,6 +85,7 @@ public class QuestionDAO {
             stmt.setString(7, question.getCorrectOption());
             stmt.setString(8, question.getStudentAnswer());
             stmt.setString(9, question.getExamId());
+            stmt.setString(10, question.getExplain()); // ✅ thêm phần explain
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -103,7 +107,8 @@ public class QuestionDAO {
             stmt.setString(6, question.getCorrectOption());
             stmt.setString(7, question.getStudentAnswer());
             stmt.setString(8, question.getExamId());
-            stmt.setString(9, question.getId());
+            stmt.setString(9, question.getExplain()); // ✅ cập nhật explain
+            stmt.setString(10, question.getId());
 
             return stmt.executeUpdate() > 0;
 
@@ -138,7 +143,8 @@ public class QuestionDAO {
                 rs.getString("option_d"),
                 rs.getString("correct_option"),
                 rs.getString("student_answer"),
-                rs.getString("exam_id")
+                rs.getString("exam_id"),
+                rs.getString("explain") // ✅ lấy explain từ DB
         );
     }
 }

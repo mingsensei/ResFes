@@ -1,0 +1,43 @@
+.chapter-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.chapter-box {
+    background-color: #f0f4f8;
+    border-left: 6px solid #2563eb;
+    padding: 16px 24px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chapter-info h3 {
+    font-size: 1.2rem;
+    color: #1e3a8a;
+    margin-bottom: 6px;
+}
+
+.chapter-info p {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin: 0;
+}
+
+.btn-learn {
+    padding: 8px 14px;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.btn-learn:hover {
+    background-color: #1d4ed8;
+}
