@@ -1,0 +1,96 @@
+/* question.css */
+
+body {
+    background-color: #f9fafb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+    margin: 0;
+    padding: 40px 20px;
+}
+
+h2 {
+    color: #34495e;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+form {
+    max-width: 600px;
+    background: #ffffff;
+    margin: 0 auto;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    margin-bottom: 15px;
+}
+
+label {
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #34495e;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+label:hover {
+    color: #2980b9;
+}
+
+input[type="radio"] {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 14px 0;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(41, 128, 185, 0.5);
+    transition: background-color 0.3s ease;
+    margin-top: 25px;
+}
+
+input[type="submit"]:hover {
+    background-color: #1c5980;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    form {
+        padding: 20px;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    input[type="submit"] {
+        font-size: 1rem;
+        padding: 12px 0;
+    }
+}

@@ -14,11 +14,11 @@ public class QuestionDAO {
     private static final String SELECT_BY_ID = "SELECT * FROM questions WHERE id = ?";
     private static final String SELECT_BY_EXAM_ID = "SELECT * FROM questions WHERE exam_id = ?";
 
-    private static final String INSERT = "INSERT INTO questions (id, content, option_a, option_b, option_c, option_d, correct_option, student_answer, exam_id, explain) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO questions (id, content, option_a, option_b, option_c, option_d, correct_option, student_answer, exam_id, explain, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String DELETE = "DELETE FROM questions WHERE id = ?";
 
-    private static final String UPDATE = "UPDATE questions SET content = ?, option_a = ?, option_b = ?, option_c = ?, option_d = ?, correct_option = ?, student_answer = ?, exam_id = ?, explain = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE questions SET content = ?, option_a = ?, option_b = ?, option_c = ?, option_d = ?, correct_option = ?, student_answer = ?, exam_id = ?, explain = ?, difficulty = ? WHERE id = ?";
 
     // ====== LẤY TOÀN BỘ ======
     public List<Question> getAllQuestions() {
@@ -85,7 +85,8 @@ public class QuestionDAO {
             stmt.setString(7, question.getCorrectOption());
             stmt.setString(8, question.getStudentAnswer());
             stmt.setString(9, question.getExamId());
-            stmt.setString(10, question.getExplain()); // ✅ thêm phần explain
+            stmt.setString(10, question.getExplain());
+            stmt.setInt(11, question.getDifficulty()); // ✅ thêm difficulty
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -107,8 +108,9 @@ public class QuestionDAO {
             stmt.setString(6, question.getCorrectOption());
             stmt.setString(7, question.getStudentAnswer());
             stmt.setString(8, question.getExamId());
-            stmt.setString(9, question.getExplain()); // ✅ cập nhật explain
-            stmt.setString(10, question.getId());
+            stmt.setString(9, question.getExplain());
+            stmt.setInt(10, question.getDifficulty()); // ✅ cập nhật difficulty
+            stmt.setString(11, question.getId());
 
             return stmt.executeUpdate() > 0;
 
@@ -144,7 +146,60 @@ public class QuestionDAO {
                 rs.getString("correct_option"),
                 rs.getString("student_answer"),
                 rs.getString("exam_id"),
-                rs.getString("explain") // ✅ lấy explain từ DB
+                rs.getString("explain"),
+                rs.getInt("difficulty") // ✅ lấy difficulty từ DB
         );
+    }
+
+    // ====== CÂU HỎI CHƯA TRẢ LỜI ======
+    public List<Question> getUnansweredQuestionsByExamId(String examId) {
+        List<Question> questions = new ArrayList<>();
+        String sql = "SELECT * FROM questions WHERE exam_id = ? AND student_answer IS NULL ORDER BY id ASC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, examId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    questions.add(extractQuestion(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return questions;
+    }
+
+    // ====== CẬP NHẬT CÂU TRẢ LỜI CỦA HỌC SINH ======
+    public boolean updateQuestionWithAnswer(Question question) {
+        String sql = "UPDATE questions SET student_answer = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, question.getStudentAnswer());
+            pstmt.setString(2, question.getId());
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Question> getAnsweredQuestionsByExamId(String examId) {
+        List<Question> questions = new ArrayList<>();
+        String sql = "SELECT * FROM questions WHERE exam_id = ? AND student_answer IS NOT NULL";
+
+        try (Connection conn = DBConnection.getConnection(); // ✅ Sử dụng DBConnection
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, examId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    questions.add(extractQuestion(rs)); // ✅ Sử dụng extractQuestion
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách câu hỏi đã trả lời: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return questions;
     }
 }

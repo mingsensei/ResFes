@@ -1,43 +1,74 @@
-.chapter-list {
-    max-width: 800px;
-    margin: 0 auto;
+/* CSS cho chapter */
+.chapter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Căn giữa các card theo chiều ngang */
     padding: 20px;
+    background-color: #f4f4f4; /* Màu nền nhạt */
+}
+
+.chapter-card {
+    width: 320px; /* Tăng kích thước card */
+    margin: 15px; /* Tăng khoảng cách giữa các card */
+    border: none; /* Loại bỏ border */
+    border-radius: 12px; /* Bo tròn góc */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Tăng độ nổi khối */
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out; /* Hiệu ứng hover */
+}
+
+.chapter-card:hover {
+    transform: translateY(-5px); /* Nhấc card lên khi hover */
+}
+
+.chapter-title {
+    padding: 20px; /* Tăng padding */
+    font-size: 1.3em; /* Tăng kích thước chữ */
+    font-weight: 600; /* Độ đậm vừa phải */
+    text-align: center;
+    color: #333; /* Màu chữ đậm hơn */
+    border-bottom: 1px solid #eee; /* Thêm đường kẻ dưới tiêu đề */
+}
+
+.chapter-actions {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    justify-content: space-around;
+    padding: 15px; /* Tăng padding */
+    background-color: #fff; /* Loại bỏ màu nền */
 }
 
-.chapter-box {
-    background-color: #f0f4f8;
-    border-left: 6px solid #2563eb;
-    padding: 16px 24px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.chapter-info h3 {
-    font-size: 1.2rem;
-    color: #1e3a8a;
-    margin-bottom: 6px;
-}
-
-.chapter-info p {
-    font-size: 0.95rem;
-    color: #4b5563;
-    margin: 0;
+.chapter-actions a {
+    display: block;
+    padding: 10px 20px; /* Tăng padding */
+    text-decoration: none;
+    border-radius: 8px; /* Bo tròn góc */
+    color: #fff;
+    text-align: center;
+    font-weight: 500; /* Độ đậm vừa phải */
+    transition: background-color 0.3s ease; /* Hiệu ứng hover */
 }
 
 .btn-learn {
-    padding: 8px 14px;
-    background-color: #2563eb;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
+    background-color: #28a745; /* Xanh lá cây */
+}
+
+.btn-test {
+    background-color: #007bff; /* Xanh dương */
 }
 
 .btn-learn:hover {
-    background-color: #1d4ed8;
+    background-color: #218838; /* Xanh lá cây đậm hơn */
+}
+
+.btn-test:hover {
+    background-color: #0056b3; /* Xanh dương đậm hơn */
+}
+
+.subject-heading {
+    text-align: center;
+    color: #343a40; /* Màu chữ đậm cho tiêu đề */
+    margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+    font-size: 2.2em; /* Tăng kích thước tiêu đề */
+    font-weight: 700; /* Đậm hơn */
 }

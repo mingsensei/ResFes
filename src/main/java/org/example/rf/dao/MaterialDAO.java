@@ -134,4 +134,28 @@ public class MaterialDAO {
                 rs.getString("vectorDbPath") // Thêm vectorDbPath
         );
     }
+
+    public String getVectorDbPathFromChapterId(String chapterId) {
+        String sql = "SELECT m.vectorDbPath FROM materials m JOIN chapters c ON m.chapter_id = c.id WHERE c.id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, chapterId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String vectorDbPath = rs.getString("vectorDbPath");
+                System.out.println("DEBUG: vectorDbPath found = " + vectorDbPath);
+                return vectorDbPath;
+            } else {
+                System.out.println("DEBUG: No vectorDbPath found for chapterId = " + chapterId);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

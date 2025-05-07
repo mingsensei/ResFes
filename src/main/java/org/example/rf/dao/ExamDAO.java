@@ -11,42 +11,43 @@ import java.util.List;
 
 public class ExamDAO {
 
-    // ====== SQL ======
-    private static final String SELECT_ALL = "SELECT * FROM exams";
-    private static final String SELECT_BY_ID = "SELECT * FROM exams WHERE id = ?";
-    private static final String SELECT_BY_STUDENT_ID = "SELECT * FROM exams WHERE student_id = ?";
-    private static final String INSERT = "INSERT INTO exams (id, student_id, chapter_id, score, submitted_at) VALUES (?, ?, ?, ?, ?)";
-    private static final String DELETE = "DELETE FROM exams WHERE id = ?";
-    private static final String UPDATE_SCORE = "UPDATE exams SET score = ?, submitted_at = ? WHERE id = ?";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM exams";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM exams WHERE id = ?";
+    private static final String SQL_SELECT_BY_STUDENT_ID = "SELECT * FROM exams WHERE student_id = ?";
+    private static final String SQL_INSERT = "INSERT INTO exams (id, student_id, chapter_id, score, submitted_at) VALUES (?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE_SCORE_TIME = "UPDATE exams SET score = ?, submitted_at = ? WHERE id = ?";
+    private static final String SQL_DELETE = "DELETE FROM exams WHERE id = ?";
+    private static final String SQL_INCREMENT_SCORE = "UPDATE exams SET score = score + 1 WHERE id = ?";
+    private static final String SQL_UPDATE_SCORE_ONLY = "UPDATE exams SET score = ? WHERE id = ?";
 
-    private QuestionDAO questionDAO = new QuestionDAO();
+    private final QuestionDAO questionDAO = new QuestionDAO();
 
-    // ====== LẤY TOÀN BỘ EXAM ======
+    // Lấy toàn bộ bài thi
     public List<Exam> getAllExams() {
-        List<Exam> list = new ArrayList<>();
+        List<Exam> exams = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(SELECT_ALL)) {
+             ResultSet rs = stmt.executeQuery(SQL_SELECT_ALL)) {
 
             while (rs.next()) {
-                list.add(extractExam(rs));
+                exams.add(mapResultSetToExam(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return exams;
     }
 
-    // ====== LẤY THEO ID ======
+    // Lấy bài thi theo ID
     public Exam getExamById(String id) {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_ID)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
 
             stmt.setString(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return extractExam(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToExam(rs);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,90 +55,131 @@ public class ExamDAO {
         return null;
     }
 
-    // ====== LẤY THEO STUDENT ======
+    // Lấy các bài thi theo mã sinh viên
     public List<Exam> getExamsByStudentId(String studentId) {
-        List<Exam> list = new ArrayList<>();
+        List<Exam> exams = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SELECT_BY_STUDENT_ID)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_STUDENT_ID)) {
 
             stmt.setString(1, studentId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                list.add(extractExam(rs));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    exams.add(mapResultSetToExam(rs));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return exams;
     }
 
-    // ====== THÊM MỚI EXAM ======
+    // Thêm mới bài thi
     public boolean insertExam(Exam exam) {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(INSERT)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT)) {
 
             stmt.setString(1, exam.getId());
             stmt.setString(2, exam.getStudentId());
-            stmt.setString(3, exam.getChapterId()); // ✅ chapter_id
+            stmt.setString(3, exam.getChapterId());
             stmt.setInt(4, exam.getScore());
             stmt.setTimestamp(5, Timestamp.valueOf(exam.getSubmittedAt()));
+            return stmt.executeUpdate() > 0;
 
-            boolean inserted = stmt.executeUpdate() > 0;
-
-            if (inserted && exam.getQuestions() != null) {
-                for (Question q : exam.getQuestions()) {
-                    q.setExamId(exam.getId());
-                    questionDAO.insertQuestion(q);
-                }
-            }
-
-            return inserted;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
-    // ====== CẬP NHẬT ĐIỂM ======
+    // Cập nhật điểm và thời gian nộp
     public boolean updateExamScoreAndTime(String examId, int score, LocalDateTime submittedAt) {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(UPDATE_SCORE)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE_SCORE_TIME)) {
 
             stmt.setInt(1, score);
             stmt.setTimestamp(2, Timestamp.valueOf(submittedAt));
             stmt.setString(3, examId);
-
             return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Tăng điểm thêm 1
+    public boolean incrementScore(String examId) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_INCREMENT_SCORE)) {
+
+            stmt.setString(1, examId);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Tính kết quả bài thi dựa vào đáp án
+    public void calculateExamResult(String examId) {
+        List<Question> questions = questionDAO.getQuestionsByExamId(examId);
+        long correctCount = questions.stream()
+                .filter(q -> q.getStudentAnswer() != null && q.getStudentAnswer().equals(q.getCorrectOption()))
+                .count();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE_SCORE_ONLY)) {
+
+            stmt.setInt(1, (int) correctCount);
+            stmt.setString(2, examId);
+            stmt.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
-    // ====== XOÁ EXAM ======
+    // Xoá bài thi
     public boolean deleteExam(String id) {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(DELETE)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
 
             stmt.setString(1, id);
             return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Chuyển đổi từ ResultSet thành Exam object
+    private Exam mapResultSetToExam(ResultSet rs) throws SQLException {
+        return new Exam(
+                rs.getString("id"),
+                rs.getString("student_id"),
+                rs.getString("chapter_id"),
+                rs.getInt("score"),
+                rs.getTimestamp("submitted_at").toLocalDateTime()
+        );
+    }
+
+    public int countQuestionsByExamId(String examId) {
+        String sql = "SELECT COUNT(*) FROM questions WHERE exam_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, examId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
-    }
-
-    // ====== PARSE EXAM ======
-    private Exam extractExam(ResultSet rs) throws SQLException {
-        String id = rs.getString("id");
-        return new Exam(
-                id,
-                rs.getString("student_id"),
-                rs.getString("chapter_id"), // ✅ đổi từ subject_id sang chapter_id
-                rs.getInt("score"),
-                rs.getTimestamp("submitted_at").toLocalDateTime(),
-                new ArrayList<>(questionDAO.getQuestionsByExamId(id))
-        );
+        return 0;
     }
 }
