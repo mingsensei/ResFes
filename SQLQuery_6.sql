@@ -65,3 +65,6 @@ CREATE TABLE users (
     password nvarchar(256) NOT NULL
 );
 GO
+
+INSERT INTO subjects values (1, 'Operating System', 'OS FPT')
+INSERT INTO chapters values (2, 'Chapter 2', 1, 2)
