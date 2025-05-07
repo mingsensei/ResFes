@@ -16,6 +16,7 @@
     <nav class="navbar">
         <div class="logo">EduPlatform</div>
         <ul class="nav-links">
+            <li><a href="<%= request.getContextPath() %>/material">Thêm tài liệu</a></li> <!-- MỤC MỚI -->
             <li><a href="subject.jsp">Môn học</a></li>
             <li><a href="#">Kiểm tra</a></li>
             <li><a href="#">AI Agent</a></li>

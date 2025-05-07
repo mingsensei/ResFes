@@ -27,7 +27,6 @@ public class QuestionServlet extends HttpServlet {
         List<Question> unansweredQuestions = questionDAO.getUnansweredQuestionsByExamId(examId);
 
         if (unansweredQuestions.isEmpty()) {
-            // Không còn câu chưa trả lời, chuyển sang trang tiếp tục hoặc kết quả
             response.sendRedirect(request.getContextPath() + "/continueExam.jsp?examId=" + examId);
             return;
         }
