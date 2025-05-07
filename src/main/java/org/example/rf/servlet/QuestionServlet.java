@@ -33,9 +33,11 @@ public class QuestionServlet extends HttpServlet {
         }
 
         Question question = unansweredQuestions.get(0); // Lấy câu đầu tiên chưa trả lời
+        Integer currentLevel = (Integer) request.getSession().getAttribute("currentLevel");
 
         request.setAttribute("question", question);
         request.setAttribute("examId", examId);
+        request.setAttribute("currentLevel", currentLevel);
         request.getRequestDispatcher("question.jsp").forward(request, response);
     }
 

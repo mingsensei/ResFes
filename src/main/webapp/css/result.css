@@ -1,3 +1,20 @@
+/* css/home-button.css */
+.home-button {
+    background-color: #4CAF50; /* Màu xanh lá cây */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px auto; /* Căn giữa button */
+    cursor: pointer;
+    border-radius: 5px;
+    display: block; /* Để margin auto hoạt động */
+    max-width: 150px; /* Giới hạn chiều rộng */
+}
+
 /* result.css */
 
 body {
@@ -6,6 +23,7 @@ body {
     color: #2c3e50;
     margin: 0;
     padding: 40px 20px;
+    text-align: center;
 }
 
 h1 {
@@ -22,6 +40,7 @@ h1 {
     padding: 30px 40px;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    text-align: center; /* Căn giữa nội dung trong container */
 }
 
 p {

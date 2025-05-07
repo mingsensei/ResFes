@@ -182,4 +182,24 @@ public class QuestionDAO {
             return false;
         }
     }
+
+    public List<Question> getAnsweredQuestionsByExamId(String examId) {
+        List<Question> questions = new ArrayList<>();
+        String sql = "SELECT * FROM questions WHERE exam_id = ? AND student_answer IS NOT NULL";
+
+        try (Connection conn = DBConnection.getConnection(); // ✅ Sử dụng DBConnection
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, examId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    questions.add(extractQuestion(rs)); // ✅ Sử dụng extractQuestion
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách câu hỏi đã trả lời: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return questions;
+    }
 }

@@ -6,20 +6,18 @@ import java.util.ArrayList;
 public class Exam {
     private String id;
     private String studentId;
-    private String chapterId; // ✅ Sửa lại từ subjectId
+    private String chapterId;
     private int score;
     private LocalDateTime submittedAt;
-    private ArrayList<Question> questions;
 
     public Exam() {}
 
-    public Exam(String id, String studentId, String chapterId, int score, LocalDateTime submittedAt, ArrayList<Question> questions) {
+    public Exam(String id, String studentId, String chapterId, int score, LocalDateTime submittedAt) {
         this.id = id;
         this.studentId = studentId;
         this.chapterId = chapterId;
         this.score = score;
         this.submittedAt = submittedAt;
-        this.questions = questions;
     }
 
     public String getId() { return id; }
@@ -37,6 +35,4 @@ public class Exam {
     public LocalDateTime getSubmittedAt() { return submittedAt; }
     public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
 
-    public ArrayList<Question> getQuestions() { return questions; }
-    public void setQuestions(ArrayList<Question> questions) { this.questions = questions; }
 }

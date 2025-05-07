@@ -34,9 +34,10 @@ public class ResultServlet extends HttpServlet {
             return;
         }
 
+        int questionCount = examDAO.countQuestionsByExamId(examId);
         request.setAttribute("exam", exam);
-
-        // Xóa session bài thi hiện tại để tránh trùng lặp khi làm bài mới
+        request.setAttribute("questionCount", questionCount);
+        // Clear session
         HttpSession session = request.getSession();
         session.removeAttribute("examId");
         session.removeAttribute("numQuestions");
@@ -45,4 +46,5 @@ public class ResultServlet extends HttpServlet {
 
         request.getRequestDispatcher("result.jsp").forward(request, response);
     }
+
 }
