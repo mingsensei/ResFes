@@ -1,72 +1,67 @@
--- Bảng USERS
-CREATE TABLE users (
-                       id VARCHAR(64) PRIMARY KEY,
-                       name NVARCHAR(100) NOT NULL,
-                       email NVARCHAR(100) NOT NULL UNIQUE,
-                       role NVARCHAR(20) NOT NULL,
-                       password NVARCHAR(256) NOT NULL
-);
-
--- Bảng SUBJECTS
-CREATE TABLE subjects (
-                          id VARCHAR(64) PRIMARY KEY,
-                          name NVARCHAR(100) NOT NULL,
-                          description NVARCHAR(255)
-);
-
--- BẢNG CHAPTERS
 CREATE TABLE chapters (
-                          id VARCHAR(64) PRIMARY KEY,
-                          title NVARCHAR(255) NOT NULL,
-                          subject_id VARCHAR(64) NOT NULL,
-                          order_index INT,
-                          FOREIGN KEY (subject_id) REFERENCES subjects(id)
+    id varchar(64) NOT NULL,
+    title nvarchar(255) NOT NULL,
+    subject_id varchar(64) NOT NULL,
+    order_index int NULL
 );
+GO
 
--- BẢNG MATERIALS
-CREATE TABLE materials (
-                           id VARCHAR(64) PRIMARY KEY,
-                           title NVARCHAR(255) NOT NULL,
-                           content NVARCHAR(MAX),
-                           chapter_id VARCHAR(64) NOT NULL,
-                           type NVARCHAR(50),
-                           FOREIGN KEY (chapter_id) REFERENCES chapters(id)
-);
-
--- BẢNG EXAMS
 CREATE TABLE exams (
-                       id VARCHAR(64) PRIMARY KEY,
-                       student_id VARCHAR(64) NOT NULL,
-                       subject_id VARCHAR(64) NOT NULL,
-                       score INT,
-                       submitted_at DATETIME,
-                       FOREIGN KEY (student_id) REFERENCES users(id),
-                       FOREIGN KEY (subject_id) REFERENCES subjects(id)
+    id varchar(64) NOT NULL,
+    student_id varchar(64) NOT NULL,
+    chapter_id varchar(64) NOT NULL,
+    score int NULL,
+    submitted_at datetime NULL
 );
+GO
 
--- ✅ BẢNG QUESTIONS (đã có explain)
-CREATE TABLE questions (
-                           id VARCHAR(64) PRIMARY KEY,
-                           content NVARCHAR(MAX) NOT NULL,
-                           option_a NVARCHAR(255),
-                           option_b NVARCHAR(255),
-                           option_c NVARCHAR(255),
-                           option_d NVARCHAR(255),
-                           correct_option NVARCHAR(1),
-                           student_answer NVARCHAR(1),
-                           exam_id VARCHAR(64) NOT NULL,
-                           explain NVARCHAR(MAX),
-                           FOREIGN KEY (exam_id) REFERENCES exams(id)
-);
-
--- BẢNG LEVELS
 CREATE TABLE levels (
-                        id VARCHAR(64) PRIMARY KEY,
-                        student_id VARCHAR(64) NOT NULL,
-                        subject_id VARCHAR(64) NOT NULL,
-                        level INT DEFAULT 1,
-                        current_exp INT DEFAULT 0,
-                        required_exp INT DEFAULT 100,
-                        FOREIGN KEY (student_id) REFERENCES users(id),
-                        FOREIGN KEY (subject_id) REFERENCES subjects(id)
+    id varchar(64) NOT NULL,
+    student_id varchar(64) NOT NULL,
+    chapter_id varchar(64) NOT NULL,
+    level int NULL,
+    current_exp int NULL,
+    required_exp int NULL
 );
+GO
+
+CREATE TABLE materials (
+    id varchar(255) NOT NULL,
+    title varchar(255) NOT NULL,
+    pdfPath varchar(255) NULL,
+    chapter_id varchar(64) NULL,
+    type varchar(50) NOT NULL,
+    vectorDbPath varchar(255) NULL
+);
+GO
+
+CREATE TABLE questions (
+    id varchar(64) NOT NULL,
+    content nvarchar(max) NOT NULL,
+    option_a nvarchar(max) NOT NULL,
+    option_b nvarchar(max) NOT NULL,
+    option_c nvarchar(max) NOT NULL,
+    option_d nvarchar(max) NOT NULL,
+    correct_option char(1) NOT NULL,
+    student_answer char(1) NULL,
+    exam_id varchar(64) NULL,
+    explain nvarchar(max) NULL,
+    difficulty int NULL
+);
+GO
+
+CREATE TABLE subjects (
+    id varchar(64) NOT NULL,
+    name nvarchar(100) NOT NULL,
+    description nvarchar(255) NULL
+);
+GO
+
+CREATE TABLE users (
+    id varchar(64) NOT NULL,
+    name nvarchar(100) NOT NULL,
+    email nvarchar(100) NOT NULL,
+    role nvarchar(20) NOT NULL,
+    password nvarchar(256) NOT NULL
+);
+GO
