@@ -1,74 +1,137 @@
-/* CSS cho chapter */
+/* CSS cho div chứa nút để căn giữa */
+.learning-path-button {
+    display: flex; /* Sử dụng flexbox */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    margin: 30px 0; /* Giữ khoảng cách trên dưới */
+}
+
+/* CSS cho nút (thẻ a) */
+.btn-learning-path {
+    padding: 12px 24px;
+    background-color: #007bff; /* Màu nền xanh dương */
+    color: white; /* Chữ trắng */
+    border-radius: 8px; /* Góc bo tròn */
+    text-decoration: none; /* Bỏ gạch chân */
+    font-weight: bold;
+
+    /* Thêm khung */
+    border: 2px solid #0056b3; /* Thêm viền màu xanh đậm hơn */
+
+    /* Đảm bảo padding hoạt động đúng và có thể dùng transform */
+    display: inline-block; /* Cần thiết để padding, border hoạt động như mong đợi */
+
+    /* Hiệu ứng chuyển động khi hover */
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+.btn-learning-path:hover {
+    background-color: #0056b3; /* Màu nền xanh đậm hơn khi hover */
+    border-color: #004085; /* Viền xanh đậm hơn nữa khi hover */
+    transform: translateY(-2px); /* Nâng nhẹ nút lên */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng nhẹ */
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+/* Tiêu đề môn học */
+.subject-heading {
+    text-align: center;
+    color: #212529;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+/* Container chứa các chương */
 .chapter-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Căn giữa các card theo chiều ngang */
-    padding: 20px;
-    background-color: #f4f4f4; /* Màu nền nhạt */
+    justify-content: center;
+    padding: 0 30px 50px;
+    gap: 25px;
 }
 
+/* Thẻ chương */
 .chapter-card {
-    width: 320px; /* Tăng kích thước card */
-    margin: 15px; /* Tăng khoảng cách giữa các card */
-    border: none; /* Loại bỏ border */
-    border-radius: 12px; /* Bo tròn góc */
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Tăng độ nổi khối */
+    width: 320px;
+    border-radius: 16px;
     background-color: #fff;
-    transition: transform 0.2s ease-in-out; /* Hiệu ứng hover */
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.25s ease;
 }
 
 .chapter-card:hover {
-    transform: translateY(-5px); /* Nhấc card lên khi hover */
+    transform: translateY(-6px);
 }
 
+/* Tiêu đề chương */
 .chapter-title {
-    padding: 20px; /* Tăng padding */
-    font-size: 1.3em; /* Tăng kích thước chữ */
-    font-weight: 600; /* Độ đậm vừa phải */
+    background-color: #f8f9fa;
+    padding: 18px 16px;
+    font-size: 1.3em;
+    font-weight: 600;
     text-align: center;
-    color: #333; /* Màu chữ đậm hơn */
-    border-bottom: 1px solid #eee; /* Thêm đường kẻ dưới tiêu đề */
+    color: #343a40;
+    border-bottom: 1px solid #dee2e6;
 }
 
+/* Khu vực nút hành động */
 .chapter-actions {
     display: flex;
-    justify-content: space-around;
-    padding: 15px; /* Tăng padding */
-    background-color: #fff; /* Loại bỏ màu nền */
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px 10px;
+    background-color: #ffffff;
 }
 
+/* Các nút bên trong thẻ chương */
 .chapter-actions a {
-    display: block;
-    padding: 10px 20px; /* Tăng padding */
-    text-decoration: none;
-    border-radius: 8px; /* Bo tròn góc */
-    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 500;
     text-align: center;
-    font-weight: 500; /* Độ đậm vừa phải */
-    transition: background-color 0.3s ease; /* Hiệu ứng hover */
+    text-decoration: none;
+    color: white;
+    margin: 6px;
+    min-width: 110px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+/* Màu nút */
 .btn-learn {
-    background-color: #28a745; /* Xanh lá cây */
-}
-
-.btn-test {
-    background-color: #007bff; /* Xanh dương */
+    background-color: #28a745;
 }
 
 .btn-learn:hover {
-    background-color: #218838; /* Xanh lá cây đậm hơn */
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-test {
+    background-color: #007bff;
 }
 
 .btn-test:hover {
-    background-color: #0056b3; /* Xanh dương đậm hơn */
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
-.subject-heading {
+/* Footer */
+footer {
     text-align: center;
-    color: #343a40; /* Màu chữ đậm cho tiêu đề */
-    margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
-    font-size: 2.2em; /* Tăng kích thước tiêu đề */
-    font-weight: 700; /* Đậm hơn */
+    padding: 20px;
+    background-color: #343a40;
+    color: white;
+    font-size: 0.95em;
+    margin-top: 40px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
 }

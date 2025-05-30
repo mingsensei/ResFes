@@ -19,6 +19,7 @@ public class ExamDAO {
     private static final String SQL_DELETE = "DELETE FROM exams WHERE id = ?";
     private static final String SQL_INCREMENT_SCORE = "UPDATE exams SET score = score + 1 WHERE id = ?";
     private static final String SQL_UPDATE_SCORE_ONLY = "UPDATE exams SET score = ? WHERE id = ?";
+    private static final String SQL_SELECT_BY_CHAPTER_ID_AND_STUDENT_ID = "SELECT * FROM exams WHERE chapter_id = ? AND student_id = ?";
 
     private final QuestionDAO questionDAO = new QuestionDAO();
 
@@ -62,6 +63,24 @@ public class ExamDAO {
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_STUDENT_ID)) {
 
             stmt.setString(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    exams.add(mapResultSetToExam(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exams;
+    }
+    //
+    public List<Exam> getExamsByChapterIdAndStudentId(String chapterId, String studentId) {
+        List<Exam> exams = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_CHAPTER_ID_AND_STUDENT_ID)) {
+
+            stmt.setString(1, chapterId);
+            stmt.setString(2, studentId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     exams.add(mapResultSetToExam(rs));

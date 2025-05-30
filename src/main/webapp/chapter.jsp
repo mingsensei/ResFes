@@ -18,6 +18,7 @@
   <nav class="navbar">
     <div class="logo">EduPlatform</div>
     <ul class="nav-links">
+      <li><a href="<%= request.getContextPath() %>/material">Thêm tài liệu</a></li>
       <li><a href="subject.jsp">Môn học</a></li>
       <li><a href="#">Kiểm tra</a></li>
       <li><a href="#">AI Agent</a></li>
@@ -28,7 +29,7 @@
         <%
           if (user != null) {
         %>
-        <a>Xin chào, <%= user.getName()%></a>
+        <a>Xin chào, <%= user.getName() %></a>
         <%
         } else {
         %>
@@ -41,22 +42,30 @@
   </nav>
 </header>
 
-<!-- Body: danh sách chương học -->
+<!-- Nội dung chính -->
 <main>
   <h1 class="subject-heading">Danh sách Chương học</h1>
+
+  <div class="learning-path-button">
+    <a href="<%= request.getContextPath() %>/learningPath?subjectId=${subjectId}" class="btn-learning-path">Xem lộ trình học toàn môn</a>
+  </div>
+
+  <!-- Danh sách chương học -->
   <div class="chapter-container">
     <c:forEach var="chapter" items="${chapterList}">
       <div class="chapter-card">
         <div class="chapter-title">${chapter.title}</div>
         <div class="chapter-actions">
-          <a href="material.jsp?chapterId=${chapter.id}" class="btn-learn">Xem tài liệu</a>
-          <a href="#" onclick="showQuestionDialog('${chapter.id}')" class="btn-test">Bắt đầu kiểm tra</a>
+          <a href="material?chapterId=${chapter.id}" class="btn-learn">Xem tài liệu</a>
+          <a href="attempt?chapterId=${chapter.id}" class="btn-test">Bài đã làm</a>
+          <a href="#" onclick="showQuestionDialog('${chapter.id}')" class="btn-test">Làm kiểm tra</a>
         </div>
       </div>
     </c:forEach>
   </div>
 </main>
 
+<!-- Script bắt đầu kiểm tra -->
 <script>
   function showQuestionDialog(chapterId) {
     let numQuestions = prompt("Vui lòng nhập số lượng câu hỏi bạn muốn:");

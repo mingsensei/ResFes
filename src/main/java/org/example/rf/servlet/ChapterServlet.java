@@ -1,7 +1,5 @@
 package org.example.rf.servlet;
 
-
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -33,12 +31,12 @@ public class ChapterServlet extends HttpServlet {
             return;
         }
 
-
         String subjectId = request.getParameter("subjectId");
 
         if (subjectId != null && !subjectId.isEmpty()) {
             List<Chapter> chapterList = chapterService.getChaptersBySubjectId(subjectId);
             request.setAttribute("chapterList", chapterList);
+            request.setAttribute("subjectId", subjectId);
             request.getRequestDispatcher("chapter.jsp").forward(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Thiếu subjectId trong URL.");
