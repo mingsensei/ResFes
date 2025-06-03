@@ -38,7 +38,7 @@ public class MaterialServlet extends HttpServlet {
 
     // Thư mục lưu trữ các file PDF đã tải lên (trên server Java)
     private static final String UPLOAD_DIRECTORY = "uploads";
-    private final String FASTAPI_URL = "http://localhost:8001";
+    private final String FASTAPI_URL = "http://localhost:8003";
 
     private final MaterialDAO materialDAO = new MaterialDAO();
     private final SubjectDAO subjectDAO = new SubjectDAO();

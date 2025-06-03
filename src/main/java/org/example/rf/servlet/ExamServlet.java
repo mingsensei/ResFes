@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class ExamServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(ExamServlet.class); // Logger
-    private static final String PYTHON_API_URL = "http://localhost:8002/generate";
+    private static final String PYTHON_API_URL = "http://localhost:8003/generate";
     private static final String PYTHON_THETA_API_URL = "http://localhost:8003/calculate_theta"; // New URL
     private final QuestionDAO questionDAO = new QuestionDAO();
     private final MaterialDAO materialDAO = new MaterialDAO();
